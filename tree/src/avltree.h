@@ -42,6 +42,7 @@ private:
 	void lrRotate(TreeNode<K, V>* node);
 	void rlRotate(TreeNode<K, V>* node);
 	int getHeight(TreeNode<K, V>* node);
+	void doRemove(TreeNode<K, V>* node, ListNode<TreeNode<K, V>*>* trace);
 	void preorderTraverse(TreeNode<K,V>* node, void (*hdlr)(TreeNode<K,V>*));
 	void postorderTraverse(TreeNode<K, V>* node, void (*hdlr)(TreeNode<K, V>*));
 	TreeNode<K,V>* root;
@@ -209,6 +210,53 @@ void AvlTree<K, V>::postorderTraverse(TreeNode<K, V>* node, void (*hdlr)(TreeNod
 		postorderTraverse(node->right, hdlr);
 	}
 	hdlr(node);
+}
+
+template <typename K, typename V>
+bool AvlTree<K, V>::remove(K key) {
+	TreeNode<K, V>* tn = root;
+	ListNode<TreeNode<K, V>*>* lNode = new ListNode<TreeNode<K, V>*>(tn, nullptr);
+	while(tn != nullptr) {
+		if(tn->key == key) {
+			doRemove(tn, lNode);
+		} else if(tn->key < key) {
+			lNode = new ListNode<TreeNode<K, V>*>(tn, lNode);
+			tn = tn->right;
+		} else {
+			lNode = new ListNode<TreeNode<K, V>*>(tn, lNode);
+			tn = tn->left;
+		}
+	}
+	return true;
+}
+
+template <typename K, typename V>
+void AvlTree<K, V>::doRemove(TreeNode<K, V>* node, ListNode<TreeNode<K, V>*>* trace) {
+	int op = 0;
+	// 叶节点，直接删除
+	if(node->left == nullptr && node->right == nullptr) {
+		if(trace->value->left == node) {
+			op = 1;
+			trace->value->left = nullptr;
+		} else {
+			op = -1;
+			trace->value->right = nullptr;
+		}
+		delete node;
+	}
+	// 一边为空，父子节点交换后删除父节点
+	else if((node->right == nullptr && node->left != nullptr)) {
+		TreeNode<K, V>* tempNode = node->left;
+		node->key = node->left->key;
+		node->value = node->left->value;
+		node->left = node->left->left;
+		node->right = node->left->right;
+		node->factor = node->left->factor;
+		delete tempNode;
+	} else if((node->left == nullptr && node->right != nullptr)) {
+		TreeNode<K, V>* tempNode = node->right;
+
+	}
 }
 
 #endif /* AVLTREE_H_ */
