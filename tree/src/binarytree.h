@@ -31,8 +31,8 @@ struct TreeNode {
 template<typename T>
 struct ListNode {
 	T value;
-	ListNode<T> next;
-	ListNode(T mvalue, ListNode<T> mnext) {
+	ListNode<T>* next;
+	ListNode(T mvalue, ListNode<T>* mnext) {
 		value = mvalue;
 		next = mnext;
 	}
