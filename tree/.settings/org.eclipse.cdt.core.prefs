@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1406023995/CPLUS_INCLUDE_PATH/delimiter=;
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1406023995/CPLUS_INCLUDE_PATH/operation=append
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1406023995/CPLUS_INCLUDE_PATH/value=D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++;D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32;D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward;D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include;D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1406023995/append=true
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.1406023995/appendContributed=true
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.release.1596529460/CPLUS_INCLUDE_PATH/delimiter=;
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.release.1596529460/CPLUS_INCLUDE_PATH/operation=append
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.release.1596529460/CPLUS_INCLUDE_PATH/value=D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++;D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32;D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward;D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include;D\:/Program Files/Mingw/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.release.1596529460/append=true
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.release.1596529460/appendContributed=true
