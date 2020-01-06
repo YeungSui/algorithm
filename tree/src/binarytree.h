@@ -45,6 +45,7 @@ struct ListNode {
 #include <cstdint>
 #include <iostream>
 #include <stack>
+#include <cassert>
 template <typename K, typename V>
 class BinaryTree {
 public:
