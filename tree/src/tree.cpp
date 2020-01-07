@@ -46,6 +46,7 @@ int main() {
 	at.insert(child9);
 	at.insert(child10);
 	at.remove(90);
+	at.remove(95);
 	void (*hdlr)(IntNode* node) = printTreeNode;
 	at.preorderTraverse(hdlr);
 	return 0;

@@ -80,7 +80,6 @@ bool AvlTree<K,V>::insert(TreeNode<K, V>* node) {
 		}
 	}
 	int tmpFactor;
-	int absOp = abs(op);
 	while(lNode != nullptr) {
 		tmpFactor = lNode->value->factor;
 		lNode->value->factor += op;
@@ -89,12 +88,13 @@ bool AvlTree<K,V>::insert(TreeNode<K, V>* node) {
 			break;
 		}
 		if(lNode->next != nullptr) {
-			if(!((tmpFactor <= 0 && op < 0) || (tmpFactor >= 0 && op > 0))) {
-				op = 0;
-			} else if(lNode->value == lNode->next->value->left) {
-				op = -absOp;
-			}else {
-				op = absOp;
+			if(abs(tmpFactor) < abs(lNode->value->factor)) {
+				op = 1;
+			} else {
+				break;
+			}
+			if(lNode->value == lNode->next->value->left) {
+				op = -op;
 			}
 		}
 		ListNode<TreeNode<K, V>*>* tempNode = lNode;
@@ -137,7 +137,7 @@ void AvlTree<K, V>::rebalance(ListNode<TreeNode<K, V>*>* trace, int op) {
 			rebalance(lNode->value);
 		}
 		if(lNode->next != nullptr) {
-			if(abs(tempFactor) - abs(lNode->value->factor) > 0) {
+			if(abs(tempFactor) > abs(lNode->value->factor)) {
 				op = 1;
 			} else {
 				// 高度不变，已平衡
