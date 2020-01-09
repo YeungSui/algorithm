@@ -7,6 +7,7 @@
 
 #ifndef TREENODE_H_
 #define TREENODE_H_
+#include <cstdint>
 template <typename K, typename V>
 struct TreeNode {
 	TreeNode<K, V>* left;
@@ -42,7 +43,6 @@ struct ListNode {
 #ifndef BINARYTREE_H_
 #define BINARYTREE_H_
 #include <string>
-#include <cstdint>
 #include <iostream>
 #include <stack>
 #include <cassert>
