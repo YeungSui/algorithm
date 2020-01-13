@@ -36,8 +36,8 @@ private:
 	void balance(RBTreeNode<K,V>* node, ListNode<RBTreeNode<K,V>*>* lNode);
 	void lRotate(RBTreeNode<K, V>* node);
 	void rRotate(RBTreeNode<K, V>* node);
-	void preorderTraverse(RBTreeNode<K, V>* node, void (*handler)(RBTreeNode<K, V>*));
-	void print(RBTreeNode<K, V>* node);
+	void preorderTraverse(RBTreeNode<K, V>* node, void (RBTree<K,V>::*handler)(RBTreeNode<K, V>*));
+	void printNode(RBTreeNode<K, V>* node);
 };
 
 template <typename K, typename V>
@@ -54,7 +54,7 @@ bool RBTree<K, V>::insert(K key, V value) {
 template <typename K, typename V>
 bool RBTree<K,V>::insert(RBTreeNode<K, V>* node) {
 	bool result = true;
-	ListNode<RBTreeNode<K, V>*>* lNode = new ListNode<RBTreeNode<K, V>*>(root, nullptr);
+	ListNode<RBTreeNode<K, V>*>* lNode = nullptr;
 	if(node != nullptr) {
 		node->black = false;
 	}
@@ -103,7 +103,7 @@ void RBTree<K, V>::balance(RBTreeNode<K, V>* node, ListNode<RBTreeNode<K, V>*>* 
 	// lNode不为空，检查node是否为黑色，是则结束，不是则检查lNode是否为黑色，是则结束，不是则继续调整
 
 	if(lNode != nullptr) {
-		if(!node->black && !lNode->black) {
+		if(node != nullptr && !node->black && !lNode->value->black) {
 			if(lNode->next != nullptr){
 				// 父节点肯定不为空，但祖父节点可能为空
 				RBTreeNode<K,V> *parent = lNode->value, *grandParent = lNode->next->value, *uncle=nullptr;
@@ -112,22 +112,29 @@ void RBTree<K, V>::balance(RBTreeNode<K, V>* node, ListNode<RBTreeNode<K, V>*>* 
 				} else {
 					uncle = grandParent->left;
 				}
-				if(!uncle->black) {
+				if(uncle != nullptr && !uncle->black) {
 					parent->black = true;
 					uncle->black = true;
-					grandParent->black = false;
+					grandParent->black = grandParent->key == root->key ? true:false;
 					balance(grandParent, lNode->next->next);
-				} else if(parent->right == node){
-					lRotate(parent);
-					lNode->value = node;
-					balance(parent, lNode);
 				} else {
-					grandParent->black = false;
-					parent->black = true;
-					rRotate(grandParent);
-					lNode->next->value = parent;
-					lNode->value = grandParent;
-					balance(uncle, lNode);
+					if(parent->right == node && grandParent->right == parent){
+						grandParent->black = false;
+						parent->black = false;
+						lRotate(grandParent);
+					} else if(parent->left == node && grandParent->left == parent){
+						grandParent->black = false;
+						parent->black = true;
+						rRotate(grandParent);
+					} else if(parent->right == node && grandParent->left == parent) {
+						lRotate(parent);
+						lNode->value = parent;
+						balance(node, lNode);
+					} else {
+						rRotate(parent);
+						lNode->value = parent;
+						balance(node, lNode);
+					}
 				}
 			} else {
 				// 第二层插入，由于根节点为黑色，不会调用该方法
@@ -141,7 +148,7 @@ void RBTree<K, V>::balance(RBTreeNode<K, V>* node, ListNode<RBTreeNode<K, V>*>* 
 }
 
 template <typename K, typename V>
-void RBTree<K, V>::rRotate(RBTreeNode<K, V>* node) {
+void RBTree<K, V>::lRotate(RBTreeNode<K, V>* node) {
 	K key = node->right->key;
 	V value = node->right->value;
 	RBTreeNode<K, V>* rrNode = node->right->right;
@@ -162,7 +169,7 @@ void RBTree<K, V>::rRotate(RBTreeNode<K, V>* node) {
 }
 
 template <typename K, typename V>
-void RBTree<K, V>::lRotate(RBTreeNode<K, V>* node) {
+void RBTree<K, V>::rRotate(RBTreeNode<K, V>* node) {
 	K key = node->left->key;
 	V value = node->left->value;
 	RBTreeNode<K, V>* llNode = node->left->left;
@@ -184,12 +191,12 @@ void RBTree<K, V>::lRotate(RBTreeNode<K, V>* node) {
 
 template <typename K, typename V>
 void RBTree<K, V>::print() {
-	void (*hdlr)(RBTreeNode<K, V>* node) = print;
-	preorderTraverse(root, print);
+	void (RBTree<K, V>::*hdlr)(RBTreeNode<K, V>*) = RBTree<K,V>::printNode;
+	preorderTraverse(root, hdlr);
 }
 
 template <typename K, typename V>
-void RBTree<K, V>::print(RBTreeNode<K, V>* node) {
+void RBTree<K, V>::printNode(RBTreeNode<K, V>* node) {
 	if(node == nullptr) {
 		std::cout << "empty node" << std::endl;
 	} else {
@@ -198,8 +205,8 @@ void RBTree<K, V>::print(RBTreeNode<K, V>* node) {
 }
 
 template <typename K, typename V>
-void RBTree<K, V>::preorderTraverse(RBTreeNode<K, V>* node, void (*handler)(RBTreeNode<K,V>*)) {
-	handler(node);
+void RBTree<K, V>::preorderTraverse(RBTreeNode<K, V>* node, void (RBTree<K, V>::*handler)(RBTreeNode<K,V>*)) {
+	(this->*handler)(node);
 	if(node != nullptr) {
 		preorderTraverse(node->left, handler);
 		preorderTraverse(node->right, handler);
