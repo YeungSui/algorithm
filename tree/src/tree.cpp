@@ -69,6 +69,8 @@ void testRBTree() {
 	RBIntNode* child8 = new RBIntNode(71, "child8");
 	RBIntNode* child9 = new RBIntNode(95, "child9");
 	RBIntNode* child10 = new RBIntNode(83, "child10");
+	RBIntNode* child11 = new RBIntNode(72, "child11");
+	RBIntNode* child12 = new RBIntNode(82, "child12");
 	RBTree<int, std::string> rbt(root);
 	rbt.insert(child1);
 	rbt.insert(child2);
@@ -80,5 +82,7 @@ void testRBTree() {
 	rbt.insert(child8);
 	rbt.insert(child9);
 	rbt.insert(child10);
+	rbt.insert(child11);
+	rbt.insert(child12);
 	rbt.print();
 }
