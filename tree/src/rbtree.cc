@@ -164,7 +164,7 @@ void RBTree<K, V>::lRotate(RBTreeNode<K, V>* node) {
 	K key = node->right->key;
 	V value = node->right->value;
 	RBTreeNode<K, V>* rrNode = node->right->right;
-	bool black = node->black;
+	bool black = node->right->black;
 
 	node->right->key = node->key;
 	node->right->value = node->value;
@@ -229,11 +229,12 @@ void RBTree<K, V>::preorderTraverse(RBTreeNode<K, V>* node, void (RBTree<K, V>::
 
 template <typename K, typename V>
 bool RBTree<K, V>::remove(K key) {
-	ListNode<RBTreeNode<K, V>*> lNode;
+	ListNode<RBTreeNode<K, V>*>* lNode;
 	RBTreeNode<K ,V>* tn = root;
 	while (tn != nullptr) {
 		if(key == tn->key) {
 			doRemove(tn, lNode);
+			break;
 		} else if(key < tn->key){
 			lNode = new ListNode<RBTreeNode<K, V>*>(tn, lNode);
 			tn = tn->left;
@@ -259,7 +260,7 @@ bool RBTree<K, V>::doRemove(RBTreeNode<K, V>* node, ListNode<RBTreeNode<K, V>*>*
 			delFixup(node, lNode);
 		}
 	} else if(node->right != nullptr && node->left == nullptr) {
-		RBTreeNode<K, V> delNode = node->right;
+		RBTreeNode<K, V>* delNode = node->right;
 		node->key = node->right->key;
 		node->value = node->right->value;
 		node->black = node->right->black;
@@ -281,10 +282,11 @@ bool RBTree<K, V>::doRemove(RBTreeNode<K, V>* node, ListNode<RBTreeNode<K, V>*>*
 			delFixup(nullptr, lNode);
 		}
 	} else {
-		RBTreeNode<K, V>* tn = node->right, successor = node->right;
-		lNode = new ListNode<RBTreeNode<K, V>*>(node, lNode);
+		RBTreeNode<K, V>* tn = node->right, *successor = node->right;
 		while(tn->left != nullptr) {
+			lNode = new ListNode<RBTreeNode<K, V>*>(tn, lNode);
 			tn = tn->left;
+			successor = tn;
 		}
 		K key = node->key;
 		V value = node->value;
@@ -311,11 +313,14 @@ void RBTree<K, V>::delFixup(RBTreeNode<K, V>* node, ListNode<RBTreeNode<K, V>*>*
 			std::cout << "嘿，自大狂，删除调整出现了兄弟节点不存在的情况，赶紧处理吧！" << std::endl;
 		} else if(!sibling->black) {
 			// 兄红，旋转，转到兄黑的情况
+			sibling->black = parent->black;
+			parent->black = false;
 			if(sibling == parent->left) {
 				rRotate(parent);
 			} else {
 				lRotate(parent);
 			}
+			lNode = new ListNode<RBTreeNode<K, V>*>(sibling, lNode);
 			delFixup(node, lNode);
 		} else {
 			// 兄黑，分为子全黑，非全黑两种情况
