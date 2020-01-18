@@ -31,6 +31,7 @@ public:
 	bool insert(RBTreeNode<K, V>* node);
 	bool remove(K key);
 	void print();
+	virtual ~RBTree();
 private:
 	RBTreeNode<K, V>* root;
 	bool doRemove(RBTreeNode<K, V>* node, ListNode<RBTreeNode<K, V>*>* lNode);
@@ -39,7 +40,9 @@ private:
 	void lRotate(RBTreeNode<K, V>* node);
 	void rRotate(RBTreeNode<K, V>* node);
 	void preorderTraverse(RBTreeNode<K, V>* node, void (RBTree<K,V>::*handler)(RBTreeNode<K, V>*));
+	void postOrderTraverse(RBTreeNode<K, V>* node, void (RBTree<K, V>::*handler)(RBTreeNode<K, V>*));
 	void printNode(RBTreeNode<K, V>* node);
+	void destroyNode(RBTreeNode<K, V>* node);
 };
 
 template <typename K, typename V>
@@ -228,6 +231,15 @@ void RBTree<K, V>::preorderTraverse(RBTreeNode<K, V>* node, void (RBTree<K, V>::
 }
 
 template <typename K, typename V>
+void RBTree<K, V>::postOrderTraverse(RBTreeNode<K, V>* node, void (RBTree<K, V>::*handler)(RBTreeNode<K, V>*)) {
+	if(node != nullptr) {
+		postOrderTraverse(node->left, handler);
+		postOrderTraverse(node->right, handler);
+	}
+	(this->*handler)(node);
+}
+
+template <typename K, typename V>
 bool RBTree<K, V>::remove(K key) {
 	ListNode<RBTreeNode<K, V>*>* lNode;
 	RBTreeNode<K ,V>* tn = root;
@@ -362,5 +374,18 @@ void RBTree<K, V>::delFixup(RBTreeNode<K, V>* node, ListNode<RBTreeNode<K, V>*>*
 		// 2.如果有两个子节点，那么会去找后继节点，后继节点必然有父节点，lNode一定不会为空
 		std::cout << "嘿，自大狂，删除调整出现了lNode为空的情况，赶紧处理吧！" << std::endl;
 	}
+}
+
+template <typename K, typename V>
+void RBTree<K, V>::destroyNode(RBTreeNode<K, V>* node) {
+	if(node != nullptr) {
+		delete node;
+	}
+}
+
+template <typename K, typename V>
+RBTree<K, V>::~RBTree() {
+	void (RBTree<K, V>::*hdlr)(RBTreeNode<K, V>*) = RBTree<K, V>::destroyNode;
+	postOrderTraverse(root, hdlr);
 }
 #endif
